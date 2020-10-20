@@ -1,26 +1,48 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios'
+import Filter from './components/Filter'
+import Countries from './components/Countries';
+import CountryDetails from './components/CountryDetails'
 
 function App() {
+  const [countries, setCountries] = useState([])
+  const [filter, setFilter] = useState('')
+  const [mode, setMode] = useState(false)
+  const [chosenCountry, setChosenCountry] = useState({})
+
+  useEffect(() => {
+    axios
+      .get('https://restcountries.eu/rest/v2/all')
+      .then(response => {
+        setCountries(response.data)
+      })
+  }, [])
+
+  const handleFilterChange = (event) => {
+    setFilter(event.target.value)
+  }
+
+  const toggleMode = (country) => {
+    setChosenCountry(country)
+    setMode(!mode)
+  }
+
+  if (mode) {
+    return (
+      <CountryDetails countries={countries} country={chosenCountry} toggleMode={toggleMode}/>
+    )
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>countries nutshell</h1>
+      <hr/>
+
+      <Filter filter={filter} filterChangeHandler={handleFilterChange} countries={countries} />
+      
+      <Countries countries={countries.filter(country => new RegExp(filter, 'i').test(country.name))} toggleMode={toggleMode} />
     </div>
-  );
+  )
 }
 
 export default App;
