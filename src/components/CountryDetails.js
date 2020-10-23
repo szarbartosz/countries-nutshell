@@ -1,8 +1,10 @@
 import React from 'react'
 import Borders from './Borders'
+import Weather from './Weather'
 
-const CountryDetails = ({ country, toggleMode, countries }) => {
-  console.log(country);
+const CountryDetails = ({ country, toggleMode, countries, weatherObject }) => {
+  if (weatherObject.weather === undefined) return <></>
+
   return (
     <div>
       <div>
@@ -11,9 +13,11 @@ const CountryDetails = ({ country, toggleMode, countries }) => {
       </div>
       <hr/>
       
+      <h3 className="mt-4 mb-4">capital: <strong>{country.capital}</strong></h3>
+
       <h3 className="mt-4 mb-4">populaiton: <strong>{country.population}</strong></h3>
 
-      <h3 className="mt-4 mb-4">capital: <strong>{country.capital}</strong></h3>
+      <Borders countries={countries} borders={country.borders}/>
 
       <h3 className="mt-4 mb-4">languages:</h3>
       <ul>
@@ -23,11 +27,11 @@ const CountryDetails = ({ country, toggleMode, countries }) => {
       <h3 className="mt-4 mb-4">currencies:</h3>
       <ul>
         {country.currencies.map(currency => <li key={currency.code}><strong>{currency.name} (symbol: {currency.symbol})</strong></li>)}
-      </ul>
+      </ul>      
 
-      <Borders countries={countries} borders={country.borders}/>
+      <Weather weatherObject={weatherObject} capital={country.capital} />
       
-      <button className="btn btn-primary btn-block" onClick={() => toggleMode(country)}>back to global list</button>
+      <button className="btn btn-info btn-block" onClick={() => toggleMode(country)}>back to global list</button>
     </div>
   )
 }

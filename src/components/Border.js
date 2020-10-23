@@ -5,7 +5,7 @@ const Border = ({ countries, alpha3Code }) => {
   return (
     <li>
       <strong>{country.name}</strong>
-      <img className="ml-1 border" src={country.flag} height="12spx" alt="flag"/>
+      <img className="ml-1 border" src={country.flag} height="12px" alt="flag"/>
     </li>
   )
 }
